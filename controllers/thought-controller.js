@@ -1,3 +1,4 @@
+const res = require('express/lib/response');
 const { User, Thought } = require('../models');
 
 const thoughtController = {
@@ -54,6 +55,30 @@ const thoughtController = {
         })
         .catch(err => res.json(err));
     },
+
+    getThoughts(req, res) => {
+        Thought.find({})
+        .then(dbUserData => res.json(dbUserData))
+        .catch(err => {
+            console.log(err);
+            res.status(400).json(err);
+        });
+    },
+
+    getThoughtById({ params },res) {
+        Thought.findOne({ _id: params.id })
+        .then(dbUserData => {
+            if (!dbUserData) {
+                res.status(404).json({ message: "No thought found with that id! "});
+                return;
+            }
+            res.json(dbUserData);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(400).json(err);
+        });
+    }
 
  
 
