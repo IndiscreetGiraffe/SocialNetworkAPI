@@ -56,7 +56,7 @@ const thoughtController = {
         .catch(err => res.json(err));
     },
 
-    getThoughts(req, res) => {
+    getThoughts(req, res) {
         Thought.find({})
         .then(dbUserData => res.json(dbUserData))
         .catch(err => {
@@ -92,9 +92,14 @@ const thoughtController = {
         .catch(err => res.status(400).json(err));)
     },
 
-    
-
- 
-
-
-}
+    deleteReaction({ params}, res) {
+        Thought.findOneAndUpdate(
+            { _id: params.id },
+            { $pull: { reactions: { reactionId: params.reactionId } } },
+            { new: true }
+        )
+        .then(dbUserData => res.json(dbUserData))
+        .catch(err => res.json(err));
+    }
+};
+module.exports = thoughtController;
