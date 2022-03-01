@@ -78,7 +78,21 @@ const thoughtController = {
             console.log(err);
             res.status(400).json(err);
         });
-    }
+    },
+
+    updateThought({ params, body}, res) {
+        Thought.findOneAndUpdate({ _id: params.id }, body, { new: true })
+        .then(dbUserData => {
+            if (!dbUserData) {
+                res.status(404).json({ message: "No thought found with that id!"});
+                return;
+            }
+            res.json(dbUserData);
+        })
+        .catch(err => res.status(400).json(err));)
+    },
+
+    
 
  
 
